@@ -1,16 +1,16 @@
 #!/bin/bash
 
 echo "Installing dependencies..."
-npm install
+exec npm install
 echo "Generating Prisma client..."
-npx prisma generate
+exec npx prisma generate
 echo "Building the project..."
-npm run build
+exec npm run build
 echo "Running migrations..."
-npx prisma migrate deploy
+exec npx prisma migrate deploy
 
 echo "Copying generated files..."
-cp -r ./generated/* ./dist/generated
+exec cp -r ./generated/* ./dist/generated
 
 echo "Restarting the server..."
-pm2 restart be-rental-kos
+exec pm2 restart be-rental-kos
