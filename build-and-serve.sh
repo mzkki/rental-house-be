@@ -1,6 +1,7 @@
 npm install
 npx prisma generate
 npm run build
+npx prisma migrate deploy
 
 cp -r ./generated/* ./dist/generated
 
