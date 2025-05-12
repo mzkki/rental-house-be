@@ -1,2 +1,6 @@
 APP_PORT=
 APP_ENV=
+JWT_SECRET=
+
+
+DATABASE_URL="mysql://root:root@localhost:3306/rental-house"
