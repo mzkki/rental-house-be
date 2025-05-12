@@ -1,0 +1,13 @@
+openapi: '3.0.3'
+info:
+  title: Rental Back End API Documentation
+  version: '1.0'
+servers:
+  - url: https://rental.mzkki.my.id
+  - url: http://localhost:3002
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
