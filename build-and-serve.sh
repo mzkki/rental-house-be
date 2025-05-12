@@ -20,5 +20,8 @@ npx prisma migrate deploy
 echo "Copying generated files..."
 cp -r ./generated/* ./dist/generated
 
+echo "Copying api spec..."
+cp -r ./api-spec.yml ./dist/api-spec.yml
+
 echo "Restarting the server..."
 pm2 restart be-rental-kos
