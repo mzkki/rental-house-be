@@ -12,22 +12,27 @@
   },
   "license": "ISC",
   "author": "mzkki",
-  "type": "module",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
+    "lint": "eslint 'src/**/*.ts'"
   },
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.17",
     "dotenv": "^16.5.0",
     "eslint": "^9.26.0",
     "express": "^5.1.0",
+    "globals": "^16.1.0",
     "install": "^0.13.0",
     "nodemon": "^3.1.10",
     "npm": "^11.3.0",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.0"
   }
 }
