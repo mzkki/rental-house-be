@@ -1,0 +1,20 @@
+{
+  "name": "rental-house-be",
+  "version": "1.0.0",
+  "description": "Rental House Back End API Service",
+  "homepage": "https://github.com/mzkki/rental-house-be#readme",
+  "bugs": {
+    "url": "https://github.com/mzkki/rental-house-be/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mzkki/rental-house-be.git"
+  },
+  "license": "ISC",
+  "author": "mzkki",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
