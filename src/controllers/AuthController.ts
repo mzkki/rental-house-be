@@ -91,7 +91,10 @@ const register = async (
     res.status(201).json({
       error: false,
       message: 'User registered successfully',
-      data: newUser,
+      data: {
+        ...newUser,
+        password: undefined,
+      },
     });
   } catch (error) {
     next(error);

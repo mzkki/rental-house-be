@@ -1,0 +1,60 @@
+openapi: '3.0.3'
+info:
+  title: Rental Back End API Documentation
+  version: '1.0'
+servers:
+  - url: https://rental.mzkki.my.id
+  - url: http://localhost:3002
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user to access restricted data
+      description: Login user to access restricted data using email and password as credential
+      responses:
+        '200':
+          description: Successfully Logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Login successful
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtYWw0ZW93cTAwMDBtMDNvdTFyMjJybG0iLCJlbWFpbCI6IjA4aGFyaXNtdUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NzA2MjQ0MiwiZXhwIjoxNzQ3MDY2MDQyfQ.bU0Xmp53gwS6yQgp8RFm9wkfvgqZtIcV7sY7nQZnNtw
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: cmal7uejb0001t2x9akruridd
+        name:
+          type: string
+          example: 'User Test'
+        email:
+          type: string
+          example: 'test@email.com'
+        role:
+          type: string
+          example: 'user'
+        created_at:
+          type: string
+          example: '2025-05-12T13:30:27.098Z'
+        updated_at:
+          type: string
+          example: '2025-05-12T13:30:27.098Z'
