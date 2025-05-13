@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/src/app.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
+    "dev": "nodemon --watch 'src/**/*.ts' --watch api-spec.yml --exec 'ts-node' src/app.ts",
     "lint": "eslint 'src/**/*.ts'",
     "postinstall": "prisma generate"
   },
