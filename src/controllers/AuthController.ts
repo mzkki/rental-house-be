@@ -60,7 +60,7 @@ const register = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, phone } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
@@ -75,6 +75,14 @@ const register = async (
       where: { email },
     });
 
+    const existingPhone = await prisma.user.findUnique({
+      where: { phone: req.body.phone },
+    });
+
+    if (existingPhone) {
+      res.status(409).json({ error: true, message: 'Phone already exists' });
+    }
+
     if (existingUser) {
       res.status(409).json({ error: true, message: 'User already exists' });
     }
@@ -88,6 +96,7 @@ const register = async (
         name,
         email,
         role,
+        phone,
         password: hashedPassword,
       },
     });

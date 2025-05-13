@@ -94,6 +94,9 @@ paths:
                 password:
                   type: string
                   example: 'password'
+                phone:
+                  type: string
+                  example: '081122113344'
       responses:
         '201':
           description: Successfully Register
@@ -124,7 +127,7 @@ paths:
                     type: string
                     example: Name, email, and password are required
         '409':
-          description: User already exist in db
+          description: Conflict - Either email or phone are used.
           content:
             application/json:
               schema:
@@ -135,7 +138,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: User already exists
+                    example: 'Email or phone number already used.'
 
 components:
   schemas:
@@ -154,6 +157,9 @@ components:
         role:
           type: string
           example: 'user'
+        phone:
+          type: string
+          example: '081122113344'
         created_at:
           type: string
           example: '2025-05-12T13:30:27.098Z'
