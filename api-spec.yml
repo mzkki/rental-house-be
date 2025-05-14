@@ -97,6 +97,13 @@ paths:
                 phone:
                   type: string
                   example: '081122113344'
+                gender:
+                  type: string
+                  example: 'M'
+                  description: 'ENUM W = Woman & M = Man'
+                age:
+                  type: number
+                  example: 20
       responses:
         '201':
           description: Successfully Register
