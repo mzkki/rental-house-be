@@ -21,8 +21,15 @@ model User {
   password  String
   role      String  @default("user")
   phone     String? @unique
+  gender    Gender? 
+  age       Int? 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   @@map("users")
+}
+
+enum Gender{
+  M
+  W
 }
