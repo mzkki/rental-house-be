@@ -60,7 +60,7 @@ const register = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name, email, password, role, phone } = req.body;
+    const { name, email, password, role, phone, gender, age } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
@@ -97,6 +97,8 @@ const register = async (
         email,
         role,
         phone,
+        age,
+        gender,
         password: hashedPassword,
       },
     });
