@@ -16,6 +16,7 @@ const login = async (
       res
         .status(400)
         .json({ error: true, message: 'Email and password are required' });
+      return;
     }
 
     const user = await prisma.user.findUnique({
@@ -30,6 +31,7 @@ const login = async (
       res
         .status(401)
         .json({ error: true, message: 'Invalid email or password' });
+      return;
     } else {
       const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
@@ -62,15 +64,14 @@ const register = async (
   try {
     const { name, email, password, role, phone, gender, age } = req.body;
 
-    // Validate input
     if (!name || !email || !password) {
       res.status(400).json({
         error: true,
         message: 'Name, email, and password are required',
       });
+      return;
     }
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -81,16 +82,16 @@ const register = async (
 
     if (existingPhone) {
       res.status(409).json({ error: true, message: 'Phone already exists' });
+      return;
     }
 
     if (existingUser) {
       res.status(409).json({ error: true, message: 'User already exists' });
+      return;
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const newUser = await prisma.user.create({
       data: {
         name,
