@@ -76,9 +76,11 @@ const register = async (
       where: { email },
     });
 
-    const existingPhone = await prisma.user.findUnique({
-      where: { phone: req.body.phone },
-    });
+    const existingPhone = phone
+      ? await prisma.user.findUnique({
+          where: { phone: req.body.phone },
+        })
+      : null;
 
     if (existingPhone) {
       res.status(409).json({ error: true, message: 'Phone already exists' });
