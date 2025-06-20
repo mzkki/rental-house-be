@@ -6,10 +6,22 @@ import path from 'path';
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const rooms = await prisma.room.findMany();
+
+    const formattedRooms = rooms.map((room) => {
+      return {
+        ...room,
+        pictures: room.pictures
+          ? JSON.parse(room.pictures).map((picture: any) => ({
+              filename: picture,
+              url: process.env.BE_URL + '/uploads/' + picture,
+            }))
+          : [],
+      };
+    });
     res.status(200).json({
       error: false,
       message: 'Successfully retrieved all rooms',
-      data: rooms,
+      data: formattedRooms,
     });
   } catch (error) {
     res.status(500).json({
@@ -21,8 +33,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, type_id, price } = req.body;
-    const picture = req.file?.filename;
+    const { name, type_id, price, files } = req.body;
 
     if (!name || !type_id || !price || isNaN(Number(price))) {
       res.status(400).json({
@@ -38,7 +49,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
         name,
         type_id,
         price: Number(price),
-        pictures: picture || null,
+        pictures: JSON.stringify(files) || null,
       },
     });
 
@@ -59,8 +70,7 @@ const update = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { name, type_id, price } = req.body;
-    const picture = req.file?.filename;
+    const { name, type_id, price, files } = req.body;
 
     if (!name || !type_id || !price || isNaN(Number(price))) {
       res.status(400).json({
@@ -84,16 +94,24 @@ const update = async (
       return;
     }
 
-    if (picture && currentRoom?.pictures) {
-      const oldFilePath = path.join(
-        __dirname,
-        '../../uploads',
-        currentRoom.pictures
-      );
+    if (files && currentRoom.pictures) {
+      const oldPictures = JSON.parse(currentRoom.pictures);
+      const newPictures = files;
 
-      if (fs.existsSync(oldFilePath)) {
-        fs.unlinkSync(oldFilePath);
-      }
+      oldPictures.forEach((picture: string) => {
+        if (!newPictures.includes(picture)) {
+          const oldFilePath = path.join(
+            __dirname,
+            process.env.APP_ENV != 'production'
+              ? '../../uploads'
+              : '../uploads',
+            picture
+          );
+          if (fs.existsSync(oldFilePath)) {
+            fs.unlinkSync(oldFilePath);
+          }
+        }
+      });
     }
 
     const updatedRoom = await prisma.room.update({
@@ -102,7 +120,7 @@ const update = async (
         name,
         type_id,
         price: Number(price),
-        pictures: picture || currentRoom?.pictures || null,
+        pictures: files ? JSON.stringify(files) : currentRoom.pictures,
       },
     });
 
@@ -138,14 +156,17 @@ const remove = async (
     }
 
     if (currentRoom.pictures) {
-      const filePath = path.join(
-        __dirname,
-        '../../uploads',
-        currentRoom.pictures
-      );
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      const pictures = JSON.parse(currentRoom.pictures || '[]');
+      pictures.forEach((picture: string) => {
+        const filePath = path.join(
+          __dirname,
+          process.env.APP_ENV != 'production' ? '../../uploads' : '../uploads',
+          picture
+        );
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
     }
 
     await prisma.room.delete({

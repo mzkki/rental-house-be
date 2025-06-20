@@ -18,7 +18,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
+app.use(
+  '/uploads',
+  express.static(
+    path.join(
+      __dirname,
+      process.env.APP_ENV != 'production' ? '../uploads' : '../../uploads'
+    )
+  )
+);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
