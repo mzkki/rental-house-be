@@ -52,6 +52,8 @@ CREATE TABLE `room_requests` (
     `reason` VARCHAR(191) NULL,
     `status` VARCHAR(191) NOT NULL DEFAULT 'pending',
     `type` VARCHAR(191) NOT NULL DEFAULT 'change',
+    `start_rent` DATETIME(3) NOT NULL,
+    `end_rent` DATETIME(3) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 

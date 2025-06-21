@@ -40,10 +40,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
       data: formattedRooms,
     });
   } catch (error) {
-    res.status(500).json({
-      error: true,
-      message: 'Failed to retrieve rooms : ' + error,
-    });
+    next(error);
   }
 };
 
