@@ -27,7 +27,7 @@ model User {
   updated_at DateTime @updatedAt
 
   room     Room?
-  change_requests ChangeRoomRequest[]
+  change_requests RoomRequest[]
   complaints Complaint[]
   replies   Reply[]
 
@@ -60,25 +60,26 @@ model Room {
 
   type        RoomType @relation(fields: [type_id], references: [id])
   user        User?    @relation(fields: [user_id], references: [id])
-  change_requests ChangeRoomRequest[]
+  change_requests RoomRequest[]
   complaints  Complaint[]
 
   @@map("rooms")
 }
 
-model ChangeRoomRequest {
+model RoomRequest {
   id          String   @id @default(cuid())
   room_id     String
   user_id     String
-  reason      String
+  reason      String?
   status      String   @default("pending")
+  type        String   @default("change")
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
   room        Room     @relation(fields: [room_id], references: [id])
   user        User     @relation(fields: [user_id], references: [id])
 
-  @@map("change_room_requests")
+  @@map("room_requests")
 }
 
 model Complaint {
