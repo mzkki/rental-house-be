@@ -48,4 +48,15 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export default validateToken;
+const validateAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user.role !== 'admin') {
+    res.status(403).json({
+      error: true,
+      message: 'Akses ditolak. Hanya admin yang dapat mengakses fitur ini.',
+    });
+    return;
+  }
+  next();
+};
+
+export default { validateToken, validateAdmin };
