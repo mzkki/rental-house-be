@@ -10,8 +10,6 @@ const uploadFiles = (req: Request, res: Response, next: NextFunction): void => {
       return;
     }
 
-    console.log('files', req.files);
-
     const fileNames = req.files.map(
       (file: Express.Multer.File) => file.filename
     );

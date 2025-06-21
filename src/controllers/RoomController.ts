@@ -5,7 +5,23 @@ import path from 'path';
 
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const rooms = await prisma.room.findMany();
+    const rooms = await prisma.room.findMany({
+      include: {
+        type: {
+          select: {
+            id: true,
+            name: true,
+            specification: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      omit: {
+        type_id: true,
+      },
+    });
 
     const formattedRooms = rooms.map((room) => {
       return {
@@ -44,14 +60,28 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
-    const newRoom = await prisma.room.create({
-      data: {
-        name,
-        type_id,
-        price: Number(price),
-        pictures: JSON.stringify(files) || null,
-      },
-    });
+    const newRoom = await prisma.room
+      .create({
+        data: {
+          name,
+          type_id,
+          price: Number(price),
+          pictures: JSON.stringify(files) || null,
+        },
+      })
+      .catch((error) => {
+        if (error.code === 'P2003') {
+          res.status(400).json({
+            error: true,
+            message: 'Invalid type_id provided',
+          });
+          return;
+        }
+      });
+
+    if (!newRoom) {
+      return;
+    }
 
     res.status(201).json({
       error: false,
