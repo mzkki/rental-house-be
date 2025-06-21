@@ -168,8 +168,43 @@ const getRequestLists = async (
   }
 };
 
+const getMyRequests = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const user = req.user;
+    const requests = await prisma.roomRequest.findMany({
+      where: { user_id: user.id },
+      include: {
+        room: {
+          select: {
+            id: true,
+            name: true,
+            type: {
+              select: {
+                name: true,
+              },
+            },
+            price: true,
+          },
+        },
+      },
+    });
+    res.status(200).json({
+      error: false,
+      message: 'Successfully retrieved your room requests',
+      data: requests,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   requestRoom,
   reviewRoomRequest,
   getRequestLists,
+  getMyRequests,
 };

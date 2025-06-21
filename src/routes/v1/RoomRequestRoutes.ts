@@ -5,6 +5,7 @@ import authMiddleware from '../../middlewares/authMiddleware';
 const router = Router();
 
 router.get('/', roomRequestController.getRequestLists);
+router.get('/me', roomRequestController.getMyRequests);
 router.post('/', roomRequestController.requestRoom);
 router.put(
   '/:id',
