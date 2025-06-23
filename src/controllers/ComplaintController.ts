@@ -67,6 +67,18 @@ const storeComplaint = async (
       return;
     }
 
+    const room = await prisma.room.findUnique({
+      where: { id: room_id },
+    });
+
+    if (!room) {
+      res.status(404).json({
+        error: true,
+        message: 'Room not found',
+      });
+      return;
+    }
+
     const newComplaint = await prisma.complaint.create({
       data: {
         reason,
@@ -99,6 +111,18 @@ const addComplaintReply = async (
       res.status(400).json({
         error: true,
         message: 'Message and complaint ID are required',
+      });
+      return;
+    }
+
+    const complaint = await prisma.complaint.findUnique({
+      where: { id: id },
+    });
+
+    if (!complaint) {
+      res.status(404).json({
+        error: true,
+        message: 'Complaint not found',
       });
       return;
     }
