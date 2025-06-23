@@ -5,7 +5,11 @@ import path from 'path';
 
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { type_id } = req.query;
     const rooms = await prisma.room.findMany({
+      where: {
+        ...(type_id && { type_id: String(type_id) }),
+      },
       include: {
         type: {
           select: {
