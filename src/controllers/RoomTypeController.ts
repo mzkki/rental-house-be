@@ -25,12 +25,18 @@ const create = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name, specification } = req.body;
+    const { name, specification, facilities } = req.body;
 
-    if (!name || !specification) {
+    const facilitiesArray = Array.isArray(facilities)
+      ? facilities
+      : facilities
+        ? facilities.split(',').map((facility: string) => facility.trim())
+        : [];
+
+    if (!name || !specification || facilitiesArray.length === 0) {
       res.status(400).json({
         error: true,
-        message: 'Name, and specification are required',
+        message: 'Name, specification, and facilities are required',
       });
       return;
     }
@@ -39,6 +45,7 @@ const create = async (
       data: {
         name,
         specification,
+        facilities: JSON.stringify(facilitiesArray),
       },
     });
 
@@ -60,12 +67,18 @@ const update = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { name, specification } = req.body;
+    const { name, specification, facilities } = req.body;
 
-    if (!name || !specification) {
+    const facilitiesArray = Array.isArray(facilities)
+      ? facilities
+      : facilities
+        ? facilities.split(',').map((facility: string) => facility.trim())
+        : [];
+
+    if (!name || !specification || facilitiesArray.length === 0) {
       res.status(400).json({
         error: true,
-        message: 'Name, and specification are required',
+        message: 'Name, specification, and facilities are required',
       });
       return;
     }
@@ -75,6 +88,7 @@ const update = async (
       data: {
         name,
         specification,
+        facilities: JSON.stringify(facilitiesArray),
       },
     });
 
