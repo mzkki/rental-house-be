@@ -36,6 +36,11 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
               url: process.env.BE_URL + '/uploads/' + picture,
             }))
           : [],
+        isRented:
+          room.start_rent && room.end_rent
+            ? new Date(room.start_rent) <= new Date() &&
+              new Date(room.end_rent) >= new Date()
+            : false,
       };
     });
     res.status(200).json({
