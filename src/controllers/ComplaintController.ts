@@ -7,7 +7,17 @@ const getAllComplaints = async (
   next: NextFunction
 ) => {
   try {
-    const complaints = await prisma.complaint.findMany();
+    const complaints = await prisma.complaint.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
     res.status(200).json({
       error: false,
       message: 'Successfully retrieved all complaints',
