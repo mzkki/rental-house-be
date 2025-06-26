@@ -28,7 +28,17 @@ const getComplaintById = async (
     const complaint = await prisma.complaint.findUnique({
       where: { id: id },
       include: {
-        replies: true,
+        replies: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
       },
     });
 
