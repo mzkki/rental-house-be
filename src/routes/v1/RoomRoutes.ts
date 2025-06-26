@@ -6,6 +6,7 @@ import authMiddleware from '../../middlewares/authMiddleware';
 const router = Router();
 
 router.get('/', roomController.getAll);
+router.get('/:id', roomController.getRoomById);
 router.post(
   '/',
   authMiddleware.validateAdmin,
