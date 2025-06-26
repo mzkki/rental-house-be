@@ -27,6 +27,20 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
       },
     });
 
+    const usedRoom = rooms.filter((room) => {
+      return room.start_rent && room.end_rent
+        ? new Date(room.start_rent) <= new Date() &&
+            new Date(room.end_rent) >= new Date()
+        : false;
+    });
+
+    const availableRoom = rooms.filter((room) => {
+      return !(room.start_rent && room.end_rent
+        ? new Date(room.start_rent) <= new Date() &&
+          new Date(room.end_rent) >= new Date()
+        : false);
+    });
+
     const formattedRooms = rooms.map((room) => {
       return {
         ...room,
@@ -46,7 +60,64 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       error: false,
       message: 'Successfully retrieved all rooms',
-      data: formattedRooms,
+      data: {
+        rooms: formattedRooms,
+        usedRoom: usedRoom.length,
+        availableRoom: availableRoom.length,
+        totalRooms: formattedRooms.length,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getRoomById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const room = await prisma.room.findUnique({
+      where: { id },
+      include: {
+        type: {
+          select: {
+            id: true,
+            name: true,
+            specification: true,
+            facilities: true,
+          },
+        },
+      },
+    });
+    if (!room) {
+      res.status(404).json({
+        error: true,
+        message: 'Room not found',
+      });
+      return;
+    }
+
+    const formattedRoom = {
+      ...room,
+      pictures: room.pictures
+        ? JSON.parse(room.pictures).map((picture: any) => ({
+            filename: picture,
+            url: process.env.BE_URL + '/uploads/' + picture,
+          }))
+        : [],
+      isRented:
+        room.start_rent && room.end_rent
+          ? new Date(room.start_rent) <= new Date() &&
+            new Date(room.end_rent) >= new Date()
+          : false,
+    };
+    res.status(200).json({
+      error: false,
+      message: 'Successfully retrieved room',
+      data: formattedRoom,
     });
   } catch (error) {
     next(error);
@@ -224,6 +295,7 @@ const remove = async (
 
 export default {
   getAll,
+  getRoomById,
   create,
   update,
   remove,
