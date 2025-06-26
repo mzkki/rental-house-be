@@ -38,6 +38,7 @@ model RoomType {
   id        String   @id @default(cuid())
   name      String
   specification String?
+  facilities  String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -55,6 +56,8 @@ model Room {
   pictures    String?
   start_rent  DateTime?
   end_rent    DateTime?
+  address     String?
+  description String?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 

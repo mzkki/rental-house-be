@@ -55,7 +55,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, type_id, price, files } = req.body;
+    const { name, type_id, price, files, address, description } = req.body;
 
     if (!name || !type_id || !price || isNaN(Number(price))) {
       res.status(400).json({
@@ -73,6 +73,8 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
           type_id,
           price: Number(price),
           pictures: JSON.stringify(files) || null,
+          address: address || null,
+          description: description || null,
         },
       })
       .catch((error) => {
@@ -106,7 +108,7 @@ const update = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { name, type_id, price, files } = req.body;
+    const { name, type_id, price, files, address, description } = req.body;
 
     if (!name || !type_id || !price || isNaN(Number(price))) {
       res.status(400).json({
@@ -157,6 +159,8 @@ const update = async (
         type_id,
         price: Number(price),
         pictures: files ? JSON.stringify(files) : currentRoom.pictures,
+        address: address || null,
+        description: description || null,
       },
     });
 
