@@ -157,6 +157,9 @@ const getRequestLists = async (
           },
         },
       },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
     res.status(200).json({
       error: false,
@@ -190,6 +193,9 @@ const getMyRequests = async (
             price: true,
           },
         },
+      },
+      orderBy: {
+        created_at: 'desc',
       },
     });
     res.status(200).json({

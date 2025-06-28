@@ -17,6 +17,9 @@ const getAllComplaints = async (
           },
         },
       },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
     res.status(200).json({
       error: false,
@@ -47,6 +50,9 @@ const getComplaintById = async (
                 email: true,
               },
             },
+          },
+          orderBy: {
+            created_at: 'desc',
           },
         },
       },
@@ -247,6 +253,9 @@ const getMyComplaints = async (
     const userId = req.user.id;
     const complaints = await prisma.complaint.findMany({
       where: { user_id: userId },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
     res.status(200).json({
       error: false,
